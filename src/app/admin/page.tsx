@@ -2,10 +2,10 @@
 
 import { useState, useEffect, useRef, FormEvent } from "react";
 import Image from "next/image";
+import { galleryImages } from "@/lib/images";
 
 interface PhotoEntry {
   id: string;
-  filename: string;
   src: string;
   title: string;
   category: string;
@@ -21,6 +21,7 @@ export default function AdminPage() {
   const [error, setError] = useState("");
 
   const [photos, setPhotos] = useState<PhotoEntry[]>([]);
+  const [hiddenIds, setHiddenIds] = useState<number[]>([]);
   const [uploading, setUploading] = useState(false);
   const [uploadMsg, setUploadMsg] = useState("");
 
@@ -37,13 +38,21 @@ export default function AdminPage() {
     setPhotos(data);
   };
 
+  const fetchHidden = async () => {
+    const res = await fetch("/api/photos/hidden");
+    const data = await res.json();
+    setHiddenIds(data);
+  };
+
   useEffect(() => {
-    if (authenticated) fetchPhotos();
+    if (authenticated) {
+      fetchPhotos();
+      fetchHidden();
+    }
   }, [authenticated]);
 
   const handleLogin = (e: FormEvent) => {
     e.preventDefault();
-    // Simple client-side gate — real auth happens on API calls
     if (password.length > 0) {
       setAuthenticated(true);
       setError("");
@@ -102,8 +111,8 @@ export default function AdminPage() {
     setUploading(false);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Delete this photo?")) return;
+  const handleDeleteUploaded = async (id: string) => {
+    if (!confirm("Delete this uploaded photo?")) return;
 
     const res = await fetch("/api/photos", {
       method: "DELETE",
@@ -116,6 +125,38 @@ export default function AdminPage() {
     } else {
       const data = await res.json();
       alert(data.error || "Delete failed");
+    }
+  };
+
+  const handleHideStatic = async (id: number) => {
+    if (!confirm("Hide this photo from the gallery?")) return;
+
+    const res = await fetch("/api/photos/hidden", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, password }),
+    });
+
+    if (res.ok) {
+      fetchHidden();
+    } else {
+      const data = await res.json();
+      alert(data.error || "Failed to hide");
+    }
+  };
+
+  const handleRestoreStatic = async (id: number) => {
+    const res = await fetch("/api/photos/hidden", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, password }),
+    });
+
+    if (res.ok) {
+      fetchHidden();
+    } else {
+      const data = await res.json();
+      alert(data.error || "Failed to restore");
     }
   };
 
@@ -154,6 +195,9 @@ export default function AdminPage() {
     );
   }
 
+  const visibleStaticPhotos = galleryImages.filter((img) => !hiddenIds.includes(img.id));
+  const hiddenStaticPhotos = galleryImages.filter((img) => hiddenIds.includes(img.id));
+
   // Admin dashboard
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
@@ -190,7 +234,6 @@ export default function AdminPage() {
           <h2 className="text-lg font-serif mb-6">Upload Photo</h2>
           <form onSubmit={handleUpload} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* File drop area */}
               <div
                 className="border-2 border-dashed border-white/10 rounded-lg p-6 flex flex-col items-center justify-center min-h-[200px] hover:border-[#6BAB80]/40 transition-colors cursor-pointer relative"
                 onClick={() => fileRef.current?.click()}
@@ -203,25 +246,13 @@ export default function AdminPage() {
                   />
                 ) : (
                   <>
-                    <svg
-                      width="32"
-                      height="32"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      className="text-white/20 mb-3"
-                    >
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-white/20 mb-3">
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                       <polyline points="17 8 12 3 7 8" />
                       <line x1="12" y1="3" x2="12" y2="15" />
                     </svg>
-                    <p className="text-sm text-white/30">
-                      Click to select a photo
-                    </p>
-                    <p className="text-xs text-white/15 mt-1">
-                      JPEG, PNG, WebP — max 10MB
-                    </p>
+                    <p className="text-sm text-white/30">Click to select a photo</p>
+                    <p className="text-xs text-white/15 mt-1">JPEG, PNG, WebP — max 10MB</p>
                   </>
                 )}
                 <input
@@ -233,12 +264,9 @@ export default function AdminPage() {
                 />
               </div>
 
-              {/* Fields */}
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs text-white/30 mb-1.5 tracking-wider uppercase">
-                    Title
-                  </label>
+                  <label className="block text-xs text-white/30 mb-1.5 tracking-wider uppercase">Title</label>
                   <input
                     type="text"
                     value={title}
@@ -247,28 +275,20 @@ export default function AdminPage() {
                     className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white outline-none focus:border-[#6BAB80] transition-colors"
                   />
                 </div>
-
                 <div>
-                  <label className="block text-xs text-white/30 mb-1.5 tracking-wider uppercase">
-                    Category
-                  </label>
+                  <label className="block text-xs text-white/30 mb-1.5 tracking-wider uppercase">Category</label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                     className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white outline-none focus:border-[#6BAB80] transition-colors appearance-none"
                   >
                     {CATEGORIES.map((c) => (
-                      <option key={c} value={c} className="bg-[#141414]">
-                        {c}
-                      </option>
+                      <option key={c} value={c} className="bg-[#141414]">{c}</option>
                     ))}
                   </select>
                 </div>
-
                 <div>
-                  <label className="block text-xs text-white/30 mb-1.5 tracking-wider uppercase">
-                    Aspect Ratio
-                  </label>
+                  <label className="block text-xs text-white/30 mb-1.5 tracking-wider uppercase">Aspect Ratio</label>
                   <div className="flex gap-3">
                     {(["tall", "wide", "square"] as const).map((a) => (
                       <button
@@ -290,13 +310,7 @@ export default function AdminPage() {
             </div>
 
             {uploadMsg && (
-              <p
-                className={`text-sm ${
-                  uploadMsg.includes("success")
-                    ? "text-[#6BAB80]"
-                    : "text-red-400"
-                }`}
-              >
+              <p className={`text-sm ${uploadMsg.includes("success") ? "text-[#6BAB80]" : "text-red-400"}`}>
                 {uploadMsg}
               </p>
             )}
@@ -311,7 +325,90 @@ export default function AdminPage() {
           </form>
         </div>
 
-        {/* Photo grid */}
+        {/* Gallery Photos (static) */}
+        <div className="mb-10">
+          <h2 className="text-lg font-serif mb-6">
+            Gallery Photos{" "}
+            <span className="text-white/20 text-sm">({visibleStaticPhotos.length} visible)</span>
+          </h2>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {visibleStaticPhotos.map((photo) => (
+              <div
+                key={photo.id}
+                className="group relative rounded-lg overflow-hidden bg-[#141414] border border-white/5"
+              >
+                <div className="aspect-square relative">
+                  <Image
+                    src={photo.src}
+                    alt={photo.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                  />
+                </div>
+                <div className="p-3">
+                  <p className="text-sm truncate">{photo.title}</p>
+                  <p className="text-[10px] text-white/30 tracking-wider uppercase mt-0.5">
+                    {photo.category}
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleHideStatic(photo.id)}
+                  className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 text-white/50 hover:text-red-400 hover:bg-black/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all text-sm"
+                  aria-label="Hide photo"
+                  title="Hide from gallery"
+                >
+                  &times;
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Hidden photos (can restore) */}
+        {hiddenStaticPhotos.length > 0 && (
+          <div className="mb-10">
+            <h2 className="text-lg font-serif mb-6">
+              Hidden Photos{" "}
+              <span className="text-white/20 text-sm">({hiddenStaticPhotos.length})</span>
+            </h2>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {hiddenStaticPhotos.map((photo) => (
+                <div
+                  key={photo.id}
+                  className="group relative rounded-lg overflow-hidden bg-[#141414] border border-white/5 opacity-50"
+                >
+                  <div className="aspect-square relative">
+                    <Image
+                      src={photo.src}
+                      alt={photo.title}
+                      fill
+                      className="object-cover grayscale"
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                    />
+                  </div>
+                  <div className="p-3">
+                    <p className="text-sm truncate">{photo.title}</p>
+                    <p className="text-[10px] text-white/30 tracking-wider uppercase mt-0.5">
+                      {photo.category} — hidden
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleRestoreStatic(photo.id)}
+                    className="absolute top-2 right-2 px-2 py-1 rounded-full bg-black/60 text-white/50 hover:text-[#6BAB80] hover:bg-black/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all text-[10px] tracking-wider uppercase"
+                    aria-label="Restore photo"
+                  >
+                    Restore
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Uploaded Photos */}
         <div>
           <h2 className="text-lg font-serif mb-6">
             Uploaded Photos{" "}
@@ -344,9 +441,8 @@ export default function AdminPage() {
                       {photo.category}
                     </p>
                   </div>
-                  {/* Delete button */}
                   <button
-                    onClick={() => handleDelete(photo.id)}
+                    onClick={() => handleDeleteUploaded(photo.id)}
                     className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 text-white/50 hover:text-red-400 hover:bg-black/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all text-sm"
                     aria-label="Delete photo"
                   >

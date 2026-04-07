@@ -23,18 +23,23 @@ export default function Gallery() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [uploadedPhotos, setUploadedPhotos] = useState<UploadedPhoto[]>([]);
+  const [hiddenIds, setHiddenIds] = useState<number[]>([]);
 
-  // Fetch uploaded photos
+  // Fetch uploaded photos and hidden IDs
   useEffect(() => {
     fetch("/api/photos")
       .then((res) => res.json())
       .then((data) => setUploadedPhotos(data))
       .catch(() => {});
+    fetch("/api/photos/hidden")
+      .then((res) => res.json())
+      .then((data) => setHiddenIds(data))
+      .catch(() => {});
   }, []);
 
-  // Merge static gallery images with uploaded photos
+  // Merge static gallery images (minus hidden) with uploaded photos
   const allImages: GalleryImage[] = [
-    ...galleryImages,
+    ...galleryImages.filter((img) => !hiddenIds.includes(img.id)),
     ...uploadedPhotos.map((p) => ({
       id: p.id as unknown as number,
       src: p.src,
