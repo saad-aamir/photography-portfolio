@@ -1,29 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readFile, writeFile } from "fs/promises";
-import { existsSync, unlinkSync } from "fs";
-import path from "path";
+import { put, list, del } from "@vercel/blob";
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "bloom2026";
-const DATA_FILE = path.join(process.cwd(), "src", "data", "photos.json");
-const UPLOADS_DIR = path.join(process.cwd(), "public", "uploads");
 
 interface PhotoEntry {
   id: string;
-  filename: string;
   src: string;
   title: string;
   category: string;
-  aspect: "tall" | "wide" | "square";
+  aspect: string;
   uploadedAt: string;
 }
 
 async function getPhotos(): Promise<PhotoEntry[]> {
   try {
-    const data = await readFile(DATA_FILE, "utf-8");
-    return JSON.parse(data);
+    const { blobs } = await list({ prefix: "metadata/" });
+    const metaBlob = blobs.find((b) => b.pathname === "metadata/photos.json");
+    if (!metaBlob) return [];
+    const res = await fetch(metaBlob.url);
+    return await res.json();
   } catch {
     return [];
   }
+}
+
+async function savePhotos(photos: PhotoEntry[]) {
+  await put("metadata/photos.json", JSON.stringify(photos), {
+    access: "public",
+    addRandomSuffix: false,
+    contentType: "application/json",
+  });
 }
 
 // GET — public, returns all uploaded photos
@@ -47,15 +53,16 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: "Photo not found" }, { status: 404 });
   }
 
-  // Delete file from disk
-  const filePath = path.join(UPLOADS_DIR, photo.filename);
-  if (existsSync(filePath)) {
-    unlinkSync(filePath);
+  // Delete image blob
+  try {
+    await del(photo.src);
+  } catch {
+    // Blob may already be deleted
   }
 
-  // Remove from data
+  // Update metadata
   const updated = photos.filter((p) => p.id !== id);
-  await writeFile(DATA_FILE, JSON.stringify(updated, null, 2));
+  await savePhotos(updated);
 
   return NextResponse.json({ success: true });
 }
