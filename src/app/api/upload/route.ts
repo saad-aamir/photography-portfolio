@@ -34,32 +34,45 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "File must be under 10MB" }, { status: 400 });
   }
 
-  // Upload to Vercel Blob
-  const ext = file.name.split(".").pop() || "jpg";
-  const filename = `photos/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  try {
+    // Check if Blob token is configured
+    if (!process.env.BLOB_READ_WRITE_TOKEN) {
+      return NextResponse.json(
+        { error: "Storage not configured. Add Vercel Blob to your project." },
+        { status: 500 }
+      );
+    }
 
-  const blob = await put(filename, file, {
-    access: "public",
-    addRandomSuffix: false,
-  });
+    // Upload to Vercel Blob
+    const ext = file.name.split(".").pop() || "jpg";
+    const filename = `photos/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
 
-  // Store metadata as a separate JSON blob
-  const id = `upload-${Date.now()}`;
-  const entry = {
-    id,
-    src: blob.url,
-    title,
-    category,
-    aspect,
-    uploadedAt: new Date().toISOString(),
-  };
+    const blob = await put(filename, file, {
+      access: "public",
+      addRandomSuffix: false,
+    });
 
-  // Read existing metadata, append, and write back
-  const photos = await getPhotos();
-  photos.push(entry);
-  await savePhotos(photos);
+    // Store metadata as a separate JSON blob
+    const id = `upload-${Date.now()}`;
+    const entry = {
+      id,
+      src: blob.url,
+      title,
+      category,
+      aspect,
+      uploadedAt: new Date().toISOString(),
+    };
 
-  return NextResponse.json({ success: true, photo: entry });
+    // Read existing metadata, append, and write back
+    const photos = await getPhotos();
+    photos.push(entry);
+    await savePhotos(photos);
+
+    return NextResponse.json({ success: true, photo: entry });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Upload failed";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }
 
 interface PhotoEntry {

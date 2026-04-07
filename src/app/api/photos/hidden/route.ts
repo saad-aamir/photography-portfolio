@@ -25,6 +25,9 @@ async function saveHiddenIds(ids: number[]) {
 
 // GET — returns list of hidden static image IDs
 export async function GET() {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    return NextResponse.json([]);
+  }
   const hidden = await getHiddenIds();
   return NextResponse.json(hidden);
 }

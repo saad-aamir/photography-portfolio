@@ -34,35 +34,43 @@ async function savePhotos(photos: PhotoEntry[]) {
 
 // GET — public, returns all uploaded photos
 export async function GET() {
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    return NextResponse.json([]);
+  }
   const photos = await getPhotos();
   return NextResponse.json(photos);
 }
 
 // DELETE — requires password, removes a photo
 export async function DELETE(request: NextRequest) {
-  const { id, password } = await request.json();
-
-  if (password !== ADMIN_PASSWORD) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const photos = await getPhotos();
-  const photo = photos.find((p) => p.id === id);
-
-  if (!photo) {
-    return NextResponse.json({ error: "Photo not found" }, { status: 404 });
-  }
-
-  // Delete image blob
   try {
-    await del(photo.src);
-  } catch {
-    // Blob may already be deleted
+    const { id, password } = await request.json();
+
+    if (password !== ADMIN_PASSWORD) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const photos = await getPhotos();
+    const photo = photos.find((p) => p.id === id);
+
+    if (!photo) {
+      return NextResponse.json({ error: "Photo not found" }, { status: 404 });
+    }
+
+    // Delete image blob
+    try {
+      await del(photo.src);
+    } catch {
+      // Blob may already be deleted
+    }
+
+    // Update metadata
+    const updated = photos.filter((p) => p.id !== id);
+    await savePhotos(updated);
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Delete failed";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
-
-  // Update metadata
-  const updated = photos.filter((p) => p.id !== id);
-  await savePhotos(updated);
-
-  return NextResponse.json({ success: true });
 }
