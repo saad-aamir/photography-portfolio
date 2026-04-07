@@ -1,0 +1,29 @@
+[
+  {
+    "id": "upload-1775586805742",
+    "filename": "1775586805741-w7282m.JPG",
+    "src": "/uploads/1775586805741-w7282m.JPG",
+    "title": "test",
+    "category": "Portraits",
+    "aspect": "tall",
+    "uploadedAt": "2026-04-07T18:33:25.742Z"
+  },
+  {
+    "id": "upload-1775587674094",
+    "filename": "1775587674092-xo7o0o.jpg",
+    "src": "/uploads/1775587674092-xo7o0o.jpg",
+    "title": "test 2",
+    "category": "Travel",
+    "aspect": "wide",
+    "uploadedAt": "2026-04-07T18:47:54.094Z"
+  },
+  {
+    "id": "upload-1775588747790",
+    "filename": "1775588747788-avbi4v.jpg",
+    "src": "/uploads/1775588747788-avbi4v.jpg",
+    "title": "test 3",
+    "category": "Portraits",
+    "aspect": "wide",
+    "uploadedAt": "2026-04-07T19:05:47.790Z"
+  }
+]
