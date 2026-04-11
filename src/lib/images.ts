@@ -104,6 +104,30 @@ export const galleryImages: GalleryImage[] = [
     title: "Cascades",
     aspect: "tall",
   },
+  {
+    id: 13,
+    src: "/images/photograph-1.jpg",
+    alt: "Couple at sunset by the cliffs",
+    category: "Portraits",
+    title: "Shoreline Glow",
+    aspect: "tall",
+  },
+  {
+    id: 14,
+    src: "/images/photograph-2.jpg",
+    alt: "Couple embracing at sunset by the sea",
+    category: "Portraits",
+    title: "Golden Embrace",
+    aspect: "wide",
+  },
+  {
+    id: 15,
+    src: "/images/photograph-3.jpg",
+    alt: "Couple portrait in black and white by the cliffs",
+    category: "Portraits",
+    title: "Timeless",
+    aspect: "tall",
+  },
 ];
 
 export interface ProjectCollection {

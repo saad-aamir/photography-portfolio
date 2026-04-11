@@ -167,7 +167,7 @@ export default function AdminPage() {
         <form onSubmit={handleLogin} className="w-full max-w-sm space-y-6">
           <div className="text-center">
             <h1 className="font-serif text-3xl italic text-[#B5D4C0]">
-              bloom & shutter
+              shoreline stories
             </h1>
             <p className="text-white/30 text-sm mt-2">Admin Panel</p>
           </div>
@@ -205,7 +205,7 @@ export default function AdminPage() {
       <header className="border-b border-white/5 px-6 md:px-12 py-5 flex items-center justify-between">
         <div>
           <h1 className="font-serif text-xl italic text-[#B5D4C0]">
-            bloom & shutter
+            shoreline stories
           </h1>
           <p className="text-white/30 text-xs mt-1">Photo Management</p>
         </div>

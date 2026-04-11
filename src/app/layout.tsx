@@ -16,7 +16,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Bloom & Shutter — Photography",
+  title: "Shoreline Stories — Photography",
   description:
     "Visual storyteller capturing moments that transcend time. Portfolio of portrait, fashion, street, and travel photography.",
 };
