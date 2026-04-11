@@ -78,15 +78,14 @@ export default function Contact() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          {["Instagram", "Behance", "LinkedIn"].map((social) => (
-            <a
-              key={social}
-              href="#"
+          <a
+              href="https://www.instagram.com/tenandscale?igsh=OG1pam9tZHp5ZGx5&utm_source=qr"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-xs tracking-[0.2em] uppercase text-white/30 hover:text-[#6BAB80] transition-colors duration-300"
             >
-              {social}
+              Instagram
             </a>
-          ))}
         </motion.div>
       </div>
     </section>
