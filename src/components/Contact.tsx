@@ -79,7 +79,7 @@ export default function Contact() {
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <a
-              href="https://www.instagram.com/tenandscale?igsh=OG1pam9tZHp5ZGx5&utm_source=qr"
+              href="https://www.instagram.com/shorelinestoriests?igsh=MWxsOGQ5ajlzaW9yNg=="
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs tracking-[0.2em] uppercase text-white/30 hover:text-[#6BAB80] transition-colors duration-300"
