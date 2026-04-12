@@ -57,7 +57,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.6, duration: 0.8 }}
         >
-          Capturing moments that transcend time
+          We believe every moment deserves to be remembered
         </motion.p>
       </motion.div>
 

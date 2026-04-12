@@ -6,7 +6,7 @@ import Image from "next/image";
 import { galleryImages, GalleryImage } from "@/lib/images";
 import Lightbox from "./Lightbox";
 
-const categories = ["All", "Portraits", "Fashion", "Street", "Travel"];
+const categories = ["All", "Portraits", "Family Moments", "Two's in Love", "Children", "Pets"];
 
 interface UploadedPhoto {
   id: string;

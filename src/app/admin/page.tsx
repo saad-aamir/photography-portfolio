@@ -13,7 +13,7 @@ interface PhotoEntry {
   uploadedAt: string;
 }
 
-const CATEGORIES = ["Portraits", "Fashion", "Street", "Travel", "Uncategorized"];
+const CATEGORIES = ["Portraits", "Family Moments", "Two's in Love", "Children", "Pets"];
 
 export default function AdminPage() {
   const [authenticated, setAuthenticated] = useState(false);
