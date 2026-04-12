@@ -206,9 +206,8 @@ export default function About() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   const stats = [
-    { number: 150, label: "Projects" },
-    { number: 12, label: "Years" },
-    { number: 30, label: "Awards" },
+    { number: 20, label: "Projects" },
+    { number: 5, label: "Years" },
   ];
 
   return (
@@ -239,7 +238,7 @@ export default function About() {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            Min &amp; Zen
+            Shoreline Stories
           </motion.h2>
           <motion.p
             className="text-white/50 mt-6 leading-relaxed"
@@ -248,7 +247,7 @@ export default function About() {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             Five years ago, we put down roots in Sussex — and fell even deeper
-            in love with the people and places around us. We&apos;re Min and Zen,
+            in love with the people and places around us. We&apos;re Shoreline Stories,
             a couple who found that our passions fit together almost as naturally
             as we do. Min brings a quiet, instinctive eye for direction and
             vision — the feeling of a moment before the shutter clicks. Zen
