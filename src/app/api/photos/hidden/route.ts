@@ -19,6 +19,7 @@ async function saveHiddenIds(ids: number[]) {
   await put("metadata/hidden.json", JSON.stringify(ids), {
     access: "public",
     addRandomSuffix: false,
+    allowOverwrite: true,
     contentType: "application/json",
   });
 }

@@ -100,6 +100,7 @@ async function savePhotos(photos: PhotoEntry[]) {
   await put("metadata/photos.json", JSON.stringify(photos), {
     access: "public",
     addRandomSuffix: false,
+    allowOverwrite: true,
     contentType: "application/json",
   });
 }
