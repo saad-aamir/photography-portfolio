@@ -238,7 +238,7 @@ export default function About() {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            Shoreline Stories
+            Sussex Light Photography
           </motion.h2>
           <motion.p
             className="text-white/50 mt-6 leading-relaxed"
@@ -247,13 +247,16 @@ export default function About() {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             Five years ago, we put down roots in Sussex — and fell even deeper
-            in love with the people and places around us. We&apos;re Shoreline Stories,
-            a couple who found that our passions fit together almost as naturally
-            as we do. Min brings a quiet, instinctive eye for direction and
-            vision — the feeling of a moment before the shutter clicks. Zen
-            brings the camera, the craft, and over five years of photographing
-            life across Europe and Asia. Together, we became something more than
-            the sum of our parts.
+            in love with the people and places around us.
+          </motion.p>
+          <motion.p
+            className="text-white/50 mt-4 leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.45 }}
+          >
+            We&apos;re Sussex Light Photography, a Sussex-based photography duo
+            specialising in natural, heartfelt family and portrait photography.
           </motion.p>
           <motion.p
             className="text-white/50 mt-4 leading-relaxed"
@@ -261,17 +264,40 @@ export default function About() {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.5 }}
           >
+            Our passions fit together almost as naturally as we do. Min brings a
+            quiet, instinctive eye for direction and vision — the feeling of a
+            moment before the shutter clicks. Zen brings the camera, the craft,
+            and over five years of experience photographing people and places
+            across Europe and Asia. Together, we became something more than the
+            sum of our parts.
+          </motion.p>
+          <motion.p
+            className="text-white/50 mt-4 leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.55 }}
+          >
             We started this business with one simple belief: that beautifully
             captured memories shouldn&apos;t be a luxury. Whether it&apos;s a
-            milestone birthday, a family afternoon in the garden, a couple&apos;s
+            milestone birthday, a family photoshoot in Sussex, a couple&apos;s
             portrait, or something in between — your story is worth telling, and
             we want to be the ones to tell it.
+          </motion.p>
+          <motion.p
+            className="text-white/50 mt-4 leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.6 }}
+          >
+            We specialise in natural, candid photography that captures real
+            connection — creating timeless images for families and individuals
+            across Sussex.
           </motion.p>
           <motion.p
             className="text-white/40 mt-6 leading-relaxed font-serif italic text-lg"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.6 }}
+            transition={{ duration: 0.6, delay: 0.65 }}
           >
             &ldquo;We know how fleeting these moments are. We&apos;re here to
             make sure you never have to let them go.&rdquo;

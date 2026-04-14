@@ -213,7 +213,7 @@ export default function Logo({
 
       {/* Bottom label */}
       <text x="250" y="478" textAnchor="middle" fontFamily="Georgia, serif" fontSize="12" letterSpacing="5" fill="#6BAB80" opacity="0.55" fontStyle="italic">
-        shoreline stories
+        sussex light
       </text>
     </svg>
   );

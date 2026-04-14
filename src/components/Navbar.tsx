@@ -6,7 +6,7 @@ import Logo from "./Logo";
 
 const navLinks = [
   { href: "#gallery", label: "Gallery" },
-  { href: "#projects", label: "Projects" },
+  { href: "#testimonials", label: "Testimonials" },
   { href: "#about", label: "About" },
   { href: "#contact", label: "Contact" },
 ];
@@ -44,7 +44,7 @@ export default function Navbar() {
         <a href="#" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <Logo size={36} minimal animated={false} />
           <span className="font-serif text-sm tracking-[0.2em] text-[#6BAB80]/80 hidden sm:inline italic">
-            shoreline stories
+            sussex light
           </span>
         </a>
 

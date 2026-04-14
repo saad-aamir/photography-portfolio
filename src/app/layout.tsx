@@ -16,7 +16,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Shoreline Stories — Photography",
+  title: "Sussex Light Photography",
   description:
     "Visual storyteller capturing moments that transcend time. Portfolio of portrait, fashion, street, and travel photography.",
 };

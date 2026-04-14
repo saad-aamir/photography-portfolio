@@ -13,6 +13,14 @@ interface PhotoEntry {
   uploadedAt: string;
 }
 
+interface TestimonialEntry {
+  id: string;
+  name: string;
+  role: string;
+  quote: string;
+  createdAt: string;
+}
+
 const CATEGORIES = ["Portraits", "Family Moments", "Two's in Love", "Children", "Pets"];
 
 export default function AdminPage() {
@@ -24,6 +32,14 @@ export default function AdminPage() {
   const [hiddenIds, setHiddenIds] = useState<number[]>([]);
   const [uploading, setUploading] = useState(false);
   const [uploadMsg, setUploadMsg] = useState("");
+
+  // Testimonial state
+  const [testimonials, setTestimonials] = useState<TestimonialEntry[]>([]);
+  const [tName, setTName] = useState("");
+  const [tRole, setTRole] = useState("");
+  const [tQuote, setTQuote] = useState("");
+  const [tMsg, setTMsg] = useState("");
+  const [tSubmitting, setTSubmitting] = useState(false);
 
   // Upload form state
   const [title, setTitle] = useState("");
@@ -44,12 +60,68 @@ export default function AdminPage() {
     setHiddenIds(data);
   };
 
+  const fetchTestimonials = async () => {
+    const res = await fetch("/api/testimonials");
+    const data = await res.json();
+    setTestimonials(data);
+  };
+
   useEffect(() => {
     if (authenticated) {
       fetchPhotos();
       fetchHidden();
+      fetchTestimonials();
     }
   }, [authenticated]);
+
+  const handleAddTestimonial = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!tName || !tQuote) {
+      setTMsg("Name and quote are required");
+      return;
+    }
+    setTSubmitting(true);
+    setTMsg("");
+    try {
+      const res = await fetch("/api/testimonials", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: tName, role: tRole, quote: tQuote, password }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setTMsg("Testimonial added!");
+        setTName("");
+        setTRole("");
+        setTQuote("");
+        fetchTestimonials();
+      } else {
+        setTMsg(data.error || "Failed to add testimonial");
+        if (res.status === 401) {
+          setAuthenticated(false);
+          setError("Invalid password");
+        }
+      }
+    } catch (err) {
+      setTMsg(`Error: ${err instanceof Error ? err.message : "Network error"}`);
+    }
+    setTSubmitting(false);
+  };
+
+  const handleDeleteTestimonial = async (id: string) => {
+    if (!confirm("Delete this testimonial?")) return;
+    const res = await fetch("/api/testimonials", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, password }),
+    });
+    if (res.ok) {
+      fetchTestimonials();
+    } else {
+      const data = await res.json();
+      alert(data.error || "Delete failed");
+    }
+  };
 
   const handleLogin = (e: FormEvent) => {
     e.preventDefault();
@@ -167,7 +239,7 @@ export default function AdminPage() {
         <form onSubmit={handleLogin} className="w-full max-w-sm space-y-6">
           <div className="text-center">
             <h1 className="font-serif text-3xl italic text-[#B5D4C0]">
-              shoreline stories
+              sussex light
             </h1>
             <p className="text-white/30 text-sm mt-2">Admin Panel</p>
           </div>
@@ -205,7 +277,7 @@ export default function AdminPage() {
       <header className="border-b border-white/5 px-6 md:px-12 py-5 flex items-center justify-between">
         <div>
           <h1 className="font-serif text-xl italic text-[#B5D4C0]">
-            shoreline stories
+            sussex light
           </h1>
           <p className="text-white/30 text-xs mt-1">Photo Management</p>
         </div>
@@ -452,6 +524,96 @@ export default function AdminPage() {
               ))}
             </div>
           )}
+        </div>
+
+        {/* Manage Testimonials */}
+        <div className="mt-10">
+          <h2 className="text-lg font-serif mb-6">Manage Testimonials</h2>
+
+          <div className="bg-[#141414] rounded-xl border border-white/5 p-6 md:p-8 mb-8">
+            <h3 className="text-sm tracking-widest uppercase text-white/40 mb-4">Add Testimonial</h3>
+            <form onSubmit={handleAddTestimonial} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs text-white/30 mb-1.5 tracking-wider uppercase">Client Name</label>
+                  <input
+                    type="text"
+                    value={tName}
+                    onChange={(e) => setTName(e.target.value)}
+                    placeholder="e.g. Emily & James"
+                    className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white outline-none focus:border-[#6BAB80] transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-white/30 mb-1.5 tracking-wider uppercase">Role / Context</label>
+                  <input
+                    type="text"
+                    value={tRole}
+                    onChange={(e) => setTRole(e.target.value)}
+                    placeholder="e.g. Wedding Client"
+                    className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white outline-none focus:border-[#6BAB80] transition-colors"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs text-white/30 mb-1.5 tracking-wider uppercase">Quote</label>
+                <textarea
+                  value={tQuote}
+                  onChange={(e) => setTQuote(e.target.value)}
+                  placeholder="Their kind words..."
+                  rows={3}
+                  className="w-full bg-[#0a0a0a] border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white outline-none focus:border-[#6BAB80] transition-colors resize-none"
+                />
+              </div>
+
+              {tMsg && (
+                <p className={`text-sm ${tMsg.includes("added") ? "text-[#6BAB80]" : "text-red-400"}`}>
+                  {tMsg}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                disabled={tSubmitting}
+                className="px-8 py-3 bg-[#6BAB80] text-black text-xs tracking-widest uppercase rounded-lg hover:bg-[#5a9a6f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {tSubmitting ? "Adding..." : "Add Testimonial"}
+              </button>
+            </form>
+          </div>
+
+          {/* Existing testimonials list */}
+          <div className="space-y-4">
+            {testimonials.length === 0 ? (
+              <div className="text-center py-12 text-white/20">
+                <p>No testimonials yet</p>
+              </div>
+            ) : (
+              testimonials.map((t) => (
+                <div
+                  key={t.id}
+                  className="bg-[#141414] border border-white/5 rounded-lg p-5 flex items-start justify-between gap-4"
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-2">
+                      <p className="text-sm font-medium text-white">{t.name}</p>
+                      {t.role && (
+                        <span className="text-[10px] tracking-wider uppercase text-[#6BAB80]">{t.role}</span>
+                      )}
+                    </div>
+                    <p className="text-sm text-white/50 italic leading-relaxed">&ldquo;{t.quote}&rdquo;</p>
+                  </div>
+                  <button
+                    onClick={() => handleDeleteTestimonial(t.id)}
+                    className="flex-shrink-0 w-7 h-7 rounded-full bg-black/40 text-white/30 hover:text-red-400 hover:bg-black/60 flex items-center justify-center transition-all text-sm"
+                    aria-label="Delete testimonial"
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </div>
     </div>

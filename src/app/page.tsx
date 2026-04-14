@@ -7,7 +7,7 @@ import CustomCursor from "@/components/CustomCursor";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Gallery from "@/components/Gallery";
-import Projects from "@/components/Projects";
+import Testimonials from "@/components/Testimonials";
 import About from "@/components/About";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -24,7 +24,7 @@ export default function Home() {
       <main>
         <Hero />
         <Gallery />
-        <Projects />
+        <Testimonials />
         <About />
         <Contact />
       </main>

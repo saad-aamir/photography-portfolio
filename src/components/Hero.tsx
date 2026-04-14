@@ -47,8 +47,8 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.2, duration: 1, ease: [0.76, 0, 0.24, 1] }}
         >
-          <span className="block text-[#B5D4C0]">shoreline</span>
-          <span className="block mt-1 md:mt-2 text-white/90">stories</span>
+          <span className="block text-[#B5D4C0]">sussex light</span>
+          <span className="block mt-1 md:mt-2 text-white/90">photography</span>
         </motion.h1>
 
         <motion.p

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { put, list, del } from "@vercel/blob";
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "shoreline2026";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "sussex2026";
 
 interface PhotoEntry {
   id: string;

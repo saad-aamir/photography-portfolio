@@ -18,7 +18,7 @@ export default function Footer() {
       >
         <Logo size={60} animated={false} minimal />
         <span className="font-serif text-sm tracking-[0.3em] text-[#6BAB80]/50 italic">
-          shoreline stories
+          sussex light
         </span>
         <div className="flex items-center gap-4">
           <span className="text-xs text-white/20">
