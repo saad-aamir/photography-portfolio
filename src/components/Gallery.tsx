@@ -27,11 +27,11 @@ export default function Gallery() {
 
   // Fetch uploaded photos and hidden IDs
   useEffect(() => {
-    fetch("/api/photos")
+    fetch("/api/photos", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => setUploadedPhotos(data))
       .catch(() => {});
-    fetch("/api/photos/hidden")
+    fetch("/api/photos/hidden", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => setHiddenIds(data))
       .catch(() => {});
