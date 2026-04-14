@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useInView, AnimatePresence } from "framer-motion";
-import { useRef, useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useCallback } from "react";
 
 interface Testimonial {
   id: string;
@@ -10,12 +10,10 @@ interface Testimonial {
   quote: string;
 }
 
-
 export default function Testimonials() {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [current, setCurrent] = useState(0);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const fetchTestimonials = async () => {
@@ -28,6 +26,7 @@ export default function Testimonials() {
       } catch {
         // Keep empty on error
       }
+      setLoaded(true);
     };
     fetchTestimonials();
   }, []);
@@ -47,17 +46,18 @@ export default function Testimonials() {
     return () => clearInterval(interval);
   }, [testimonials.length, next]);
 
+  // Don't render anything until we know if there are testimonials
+  if (!loaded || testimonials.length === 0) return null;
+
   const testimonial = testimonials[current];
 
-  if (testimonials.length === 0) return null;
-
   return (
-    <section ref={ref} id="testimonials" className="py-24 md:py-32 px-6 md:px-12">
+    <section id="testimonials" className="py-24 md:py-32 px-6 md:px-12">
       {/* Header */}
       <motion.div
         className="text-center mb-16 max-w-[1400px] mx-auto"
         initial={{ opacity: 0, y: 30 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
         <span className="text-xs tracking-[0.5em] uppercase text-[#6BAB80]">
@@ -72,11 +72,11 @@ export default function Testimonials() {
       <motion.div
         className="max-w-[800px] mx-auto"
         initial={{ opacity: 0, y: 40 }}
-        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
       >
         <div className="relative bg-[#141414] border border-white/5 rounded-2xl p-8 md:p-12 min-h-[280px] flex flex-col items-center justify-center text-center">
-          {/* Decorative quotation mark */}
+          {/* Decorative quotation marks */}
           <div className="absolute top-6 left-8 md:top-8 md:left-12 select-none pointer-events-none">
             <span className="font-serif text-6xl md:text-8xl text-[#6BAB80]/15 leading-none">
               &ldquo;
