@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { put, list, del } from "@vercel/blob";
 
+export const dynamic = "force-dynamic";
+
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "sussex2026";
 
 interface PhotoEntry {
@@ -17,7 +19,7 @@ async function getPhotos(): Promise<PhotoEntry[]> {
     const { blobs } = await list({ prefix: "metadata/" });
     const metaBlob = blobs.find((b) => b.pathname === "metadata/photos.json");
     if (!metaBlob) return [];
-    const res = await fetch(metaBlob.url);
+    const res = await fetch(`${metaBlob.url}?t=${Date.now()}`, { cache: "no-store" });
     return await res.json();
   } catch {
     return [];

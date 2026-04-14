@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { put, list } from "@vercel/blob";
 
+export const dynamic = "force-dynamic";
+
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "sussex2026";
 
 async function getHiddenIds(): Promise<number[]> {
@@ -8,7 +10,7 @@ async function getHiddenIds(): Promise<number[]> {
     const { blobs } = await list({ prefix: "metadata/" });
     const metaBlob = blobs.find((b) => b.pathname === "metadata/hidden.json");
     if (!metaBlob) return [];
-    const res = await fetch(metaBlob.url);
+    const res = await fetch(`${metaBlob.url}?t=${Date.now()}`, { cache: "no-store" });
     return await res.json();
   } catch {
     return [];
