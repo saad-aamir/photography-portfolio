@@ -10,34 +10,11 @@ interface Testimonial {
   quote: string;
 }
 
-const placeholderTestimonials: Testimonial[] = [
-  {
-    id: "placeholder-1",
-    name: "Emily & James",
-    role: "Wedding Clients",
-    quote:
-      "Sussex Light Photography captured our wedding day with such warmth and artistry. Every photo feels like reliving the most beautiful moments of our lives.",
-  },
-  {
-    id: "placeholder-2",
-    name: "Sarah Thompson",
-    role: "Family Portrait Session",
-    quote:
-      "They have an incredible ability to make everyone feel at ease. Our children were laughing and being themselves, and the photos are absolutely magical.",
-  },
-  {
-    id: "placeholder-3",
-    name: "David & Priya",
-    role: "Engagement Shoot",
-    quote:
-      "We were nervous about being in front of the camera, but Min and Zen made it feel effortless. The results were beyond anything we imagined.",
-  },
-];
 
 export default function Testimonials() {
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [testimonials, setTestimonials] = useState<Testimonial[]>(placeholderTestimonials);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
@@ -45,11 +22,11 @@ export default function Testimonials() {
       try {
         const res = await fetch("/api/testimonials");
         const data = await res.json();
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           setTestimonials(data);
         }
       } catch {
-        // Keep placeholders on error
+        // Keep empty on error
       }
     };
     fetchTestimonials();
@@ -71,6 +48,8 @@ export default function Testimonials() {
   }, [testimonials.length, next]);
 
   const testimonial = testimonials[current];
+
+  if (testimonials.length === 0) return null;
 
   return (
     <section ref={ref} id="testimonials" className="py-24 md:py-32 px-6 md:px-12">
