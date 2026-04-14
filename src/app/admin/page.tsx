@@ -123,13 +123,26 @@ export default function AdminPage() {
     }
   };
 
-  const handleLogin = (e: FormEvent) => {
+  const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
-    if (password.length > 0) {
-      setAuthenticated(true);
-      setError("");
-    } else {
+    if (!password.length) {
       setError("Enter a password");
+      return;
+    }
+    try {
+      const res = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      if (res.ok) {
+        setAuthenticated(true);
+        setError("");
+      } else {
+        setError("Invalid password");
+      }
+    } catch {
+      setError("Connection error");
     }
   };
 
