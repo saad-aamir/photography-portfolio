@@ -303,6 +303,41 @@ export default function About() {
             make sure you never have to let them go.&rdquo;
           </motion.p>
 
+          {/* Areas we cover */}
+          <motion.div
+            className="mt-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.7 }}
+          >
+            <span className="text-[10px] tracking-[0.4em] uppercase text-[#6BAB80]/70 block mb-3">
+              Areas We Cover
+            </span>
+            <div className="flex flex-wrap gap-x-3 gap-y-2 text-sm text-white/30">
+              {[
+                "Ardingly",
+                "Brighton & Hove",
+                "Burgess Hill",
+                "Crawley",
+                "Haywards Heath",
+                "Hassocks",
+                "Horsham",
+                "Three Bridges",
+                "Balcombe",
+                "Lindfield",
+              ].map((city, i, arr) => (
+                <span key={city} className="inline-flex items-center">
+                  <span className="text-white/45 hover:text-[#6BAB80] transition-colors cursor-default">
+                    {city}
+                  </span>
+                  {i < arr.length - 1 && (
+                    <span className="ml-2 text-base text-[#6BAB80]/40">&#x2022;</span>
+                  )}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
           {/* Stats */}
           <motion.div
             className="flex gap-10 md:gap-14 mt-10"
