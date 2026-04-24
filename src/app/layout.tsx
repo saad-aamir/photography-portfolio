@@ -18,7 +18,11 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: "Sussex Light Photography",
   description:
-    "Visual storyteller capturing moments that transcend time. Portfolio of portrait, fashion, street, and travel photography.",
+    "Natural, heartfelt family and portrait photography across Sussex. Capturing real moments for couples, families, and individuals.",
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/apple-icon.svg",
+  },
 };
 
 export default function RootLayout({
