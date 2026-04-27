@@ -101,7 +101,7 @@ export default function Contact() {
             Ready?
           </span>
           <h3 className="font-serif text-2xl md:text-3xl mt-3">
-            Book Your Session
+            Book a Session or Make an Inquiry
           </h3>
         </div>
         <div className="rounded-2xl overflow-hidden border border-white/5">
