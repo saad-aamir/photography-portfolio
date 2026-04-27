@@ -88,6 +88,34 @@ export default function Contact() {
             </a>
         </motion.div>
       </div>
+
+      {/* Booking Form */}
+      <motion.div
+        className="max-w-[700px] mx-auto mt-20"
+        initial={{ opacity: 0, y: 30 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.8, delay: 0.5 }}
+      >
+        <div className="text-center mb-8">
+          <span className="text-xs tracking-[0.5em] uppercase text-[#6BAB80]">
+            Ready?
+          </span>
+          <h3 className="font-serif text-2xl md:text-3xl mt-3">
+            Book Your Session
+          </h3>
+        </div>
+        <div className="rounded-2xl overflow-hidden border border-white/5">
+          <iframe
+            src="https://form.typeform.com/to/wxw3gInd"
+            width="100%"
+            height="500"
+            frameBorder="0"
+            allow="camera; microphone; autoplay; encrypted-media;"
+            style={{ border: "none", background: "#141414" }}
+            title="Book a session"
+          />
+        </div>
+      </motion.div>
     </section>
   );
 }
