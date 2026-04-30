@@ -20,8 +20,12 @@ export const metadata: Metadata = {
   description:
     "Natural, heartfelt family and portrait photography across Sussex. Capturing real moments for couples, families, and individuals.",
   icons: {
-    icon: "/favicon.svg",
-    apple: "/apple-icon.svg",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-48x48.png", type: "image/png", sizes: "48x48" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
 };
 
