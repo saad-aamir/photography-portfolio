@@ -43,10 +43,10 @@ export default function Contact() {
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           <a
-            href="mailto:tenandscale@gmail.com"
+            href="mailto:info@sussexlightphotography.com"
             className="inline-flex items-center gap-3 px-8 py-4 border border-[#6BAB80]/50 text-[#6BAB80] text-xs tracking-[0.3em] uppercase rounded-full hover:bg-[#6BAB80] hover:text-black transition-all duration-500"
           >
-            <span>tenandscale@gmail.com</span>
+            <span>info@sussexlightphotography.com</span>
             <svg
               width="16"
               height="16"

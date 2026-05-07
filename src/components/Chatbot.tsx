@@ -31,7 +31,7 @@ function getBotResponse(input: string): string {
 
   // Booking
   if (msg.includes("book") || msg.includes("appointment") || msg.includes("schedule") || msg.includes("reserve") || msg.includes("available")) {
-    return "We'd love to hear from you! You can reach us at tenandscale@gmail.com or call +44 7413 565121. You can also message us on Instagram @sussexlightphotography. We'll get back to you as soon as possible to arrange your session!";
+    return "We'd love to hear from you! You can reach us at info@sussexlightphotography.com or call +44 7413 565121. You can also message us on Instagram @sussexlightphotography. We'll get back to you as soon as possible to arrange your session!";
   }
 
   // What's included
@@ -46,7 +46,7 @@ function getBotResponse(input: string): string {
 
   // Contact
   if (msg.includes("contact") || msg.includes("email") || msg.includes("phone") || msg.includes("call") || msg.includes("reach")) {
-    return "You can reach us at:\n\n📧 tenandscale@gmail.com\n📞 +44 7413 565121\n📸 Instagram: @sussexlightphotography\n\nWe're always happy to chat!";
+    return "You can reach us at:\n\n📧 info@sussexlightphotography.com\n📞 +44 7413 565121\n📸 Instagram: @sussexlightphotography\n\nWe're always happy to chat!";
   }
 
   // About
@@ -75,7 +75,7 @@ function getBotResponse(input: string): string {
   }
 
   // Default
-  return "Thanks for your message! For specific enquiries, please reach out to us at tenandscale@gmail.com or call +44 7413 565121. We'd be happy to help!";
+  return "Thanks for your message! For specific enquiries, please reach out to us at info@sussexlightphotography.com or call +44 7413 565121. We'd be happy to help!";
 }
 
 export default function Chatbot() {
